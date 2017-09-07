@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.IO;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Diagnostics;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using RealwearImageAnalysis;
@@ -61,6 +62,9 @@ namespace ImageUploadAPI.Controllers
             //1. Name of your azure storage account
             //2. Your storage account access key. Can be found by in "Access keys" under Settings for your Storage account
             CloudStorageAccount storage_account;
+
+            //make sure that you have added in your storage account name and your storage account key before executing
+            Debug.Assert(!Constants.STORAGE_ACCOUNT_NAME.Equals("") && !Constants.STORAGE_ACCOUNT_ACCESS_KEY.Equals(""), "Go to ImageUploadAPI Constants.cs to add in your storage account name and access key");
             try
             {
                 storage_account = new CloudStorageAccount(
@@ -75,6 +79,7 @@ namespace ImageUploadAPI.Controllers
             CloudBlobClient blob_client = storage_account.CreateCloudBlobClient();
 
             //get reference to container the specified container blob storage. If the container does not exist, waits for it to be created.
+            Debug.Assert(!Constants.CONTAINER_NAME.Equals(""), "Go to ImageUploadAPI Constants.cs class to add in your container name");
             CloudBlobContainer container = blob_client.GetContainerReference(Constants.CONTAINER_NAME);
             container.CreateIfNotExists();
 

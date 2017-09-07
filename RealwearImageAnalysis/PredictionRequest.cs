@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Drawing;
 using System.IO;
+using System.Diagnostics;
 
 
 namespace RealwearImageAnalysis
@@ -30,6 +31,7 @@ namespace RealwearImageAnalysis
             var client = new HttpClient();
 
             //Swap Constants.PREDICTION_KEY for the prediction key associated with your account. Can be found by clicking the settings icon
+            Debug.Assert(!Constants.PREDICTION_KEY.Equals(""), "Go to ImageUploadAPI Constants.cs to add your Custom Vision prediction key");
             client.DefaultRequestHeaders.Add("Prediction-Key", Constants.PREDICTION_KEY);
             HttpResponseMessage response;
             using (var content = new ByteArrayContent(byte_data))
@@ -38,6 +40,7 @@ namespace RealwearImageAnalysis
 
                 //PostAsync to the prediction url for your Custom Vision project. To find the prediction url, click on the performance tab at the top of your project,
                 //then click on "Prediction URL". Use the url provided under "If you have an image file."
+                Debug.Assert(!Constants.CLASSIFY_URL.Equals(""), "Go to ImageUplaodAPI Constants.cs to add your Custom Vision classification URL");
                 response = await client.PostAsync(Constants.CLASSIFY_URL, content);
                 Console.WriteLine(await response.Content.ReadAsStringAsync());
             }

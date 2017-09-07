@@ -156,7 +156,6 @@ namespace AnalyzeImage
         {
 
             Bitmap bitmap = (Bitmap)data.Extras.Get("data");
-            System.Threading.Thread.Sleep(5000);
             _imageView.SetImageBitmap(bitmap);
             var sd_card_path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
             //sets private variable image_path to the path of the current selected image
@@ -225,7 +224,7 @@ namespace AnalyzeImage
         {
             //Constructs POST request to API. Replace Constants.API_URL with the address of your own web API. To create the 
             //Web API, look at the ImageUploadAPI project
-            HttpClient get_client = new HttpClient();
+            /*HttpClient get_client = new HttpClient();
             try
             {
                 HttpResponseMessage get_response = get_client.GetAsync("http://091b8a24.ngrok.io/api/values/1").Result;
@@ -233,7 +232,7 @@ namespace AnalyzeImage
             {
                 Console.WriteLine(e);
                 Toast.MakeText(Application.Context, "Problem connecting with API", ToastLength.Short).Show();
-            }
+            }*/
             
             var speech_result = Plugin.TextToSpeech.CrossTextToSpeech.Current.Speak("Uploading for analysis."); //gets device to say "Uploading for analysis"
             HttpContent file_stream_content = new StreamContent(image_stream);
@@ -241,7 +240,9 @@ namespace AnalyzeImage
             var form_data = new MultipartFormDataContent();
             String file_name = image_path.Replace("/", string.Empty);
             form_data.Add(file_stream_content, file_name, file_name);
-            var response = client.PostAsync(Constants.API_URL, form_data).Result;
+
+            System.Diagnostics.Debug.Assert(!Constants.POST_API_URL.Equals(""), "Go to AnalyzeImage Constants.cs to add your POST api url");
+            var response = client.PostAsync(Constants.POST_API_URL, form_data).Result;
 
             //gets the response from the API as a string. The response is a Tuple of a throwaway int and a List that contains the tuples of the row and column
             //coordinates of all of the subsections that are identified as having crushed cans. Used a tuple with a throwaway int to make it into an object.
