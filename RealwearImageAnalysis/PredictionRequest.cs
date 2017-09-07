@@ -104,13 +104,12 @@ namespace RealwearImageAnalysis
 
         public async Task<List<Tuple<int, int>>> Classify_Image(Bitmap bitmap)
         {
-         
             int height = bitmap.Height;
             int width = bitmap.Width;
             
             //List of all tasks, one for each subsection
             List<Task<List<Pred>>> tasks = new List<Task<List<Pred>>>();
-            Bitmap section;
+            
 
             //Swap out NUM_PARTITIONS_H and NUM_PARTITIONS_W with the number of images you want to divide the entire image into height wise and width-wise, respectively.
 
@@ -118,6 +117,7 @@ namespace RealwearImageAnalysis
             {
                 for (int c = 0; c < Constants.NUM_PARTITIONS_W; c++)
                 {
+                    Bitmap section;
                     //Clone a subsection of the image, then convert into byte array
                     Rectangle rect = new Rectangle(c * width / Constants.NUM_PARTITIONS_W, r * height / Constants.NUM_PARTITIONS_H, width / Constants.NUM_PARTITIONS_W, height / Constants.NUM_PARTITIONS_H);
                     section = bitmap.Clone(rect, bitmap.PixelFormat);
@@ -127,12 +127,12 @@ namespace RealwearImageAnalysis
                         section.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                         section_barr = stream.ToArray();
                     }
-
                     section.Dispose();
                     section = null;
+
                     int row = r;
                     int col = c;
-
+                    
                     //Pass byte array of subsection into Classify_Subimage. This is done with tasks
                     var retval = new Task<List<Pred>>(() => Classify_Subimage(section_barr, row, col).Result);
                     tasks.Add(retval);
@@ -145,19 +145,24 @@ namespace RealwearImageAnalysis
 
             //keeps track of the row and col for each subimage that contains crushed cans
             List<Tuple<int, int>> crushed_coordinates = new List<Tuple<int, int>>();
-
             foreach(var task in tasks)
             {
-                List<Pred> sorted_pred = task.Result;
-                Console.WriteLine(sorted_pred.ToString());
-                int r = sorted_pred[0].Coordinates.Item1;
-                int c = sorted_pred[0].Coordinates.Item2;
-                if (Is_Can(sorted_pred))
+                try
                 {
-                    if (Crushed(sorted_pred).Equals("crushed"))
+                    List<Pred> sorted_pred = task.Result;
+                    int r = sorted_pred[0].Coordinates.Item1;
+                    int c = sorted_pred[0].Coordinates.Item2;
+                    if (Is_Can(sorted_pred))
                     {
-                        crushed_coordinates.Add(new Tuple<int, int>(r, c));
+                        if (Crushed(sorted_pred).Equals("crushed"))
+                        {
+                            crushed_coordinates.Add(new Tuple<int, int>(r, c));
+                        }
                     }
+                }
+                catch
+                {
+                    continue;
                 }
                 
                 

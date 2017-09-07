@@ -56,7 +56,6 @@ namespace ImageUploadAPI.Controllers
             
             string filename = file.Headers.ContentDisposition.FileName.Trim('\"'); // gets rid of quotes around filename
             var file_byte_array = await file.ReadAsByteArrayAsync();
-
             //get storage account
             //listed below are the parameters in order for creating a new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials
             //1. Name of your azure storage account
@@ -121,7 +120,7 @@ namespace ImageUploadAPI.Controllers
             await Request.Content.ReadAsMultipartAsync(provider);
 
 
-            //currently only allows one file at a time, so just take only file in contents. Image file. 
+            //currently only allows one file at a time, so just take only file in contents. Image file.
             var file = provider.Contents[0];
 
             var azure_result = Upload_File_To_Azure(file);
@@ -131,7 +130,7 @@ namespace ImageUploadAPI.Controllers
 
             //Bitmap representation of image file
             Bitmap file_bitmap = new Bitmap(new MemoryStream(file_byte_array));
-            
+
             PredictionRequest pr = new PredictionRequest();
             List<Tuple<int, int>> classify_result = await pr.Classify_Image(file_bitmap);
             await azure_result;

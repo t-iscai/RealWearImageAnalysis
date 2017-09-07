@@ -222,17 +222,6 @@ namespace AnalyzeImage
 
         private async Task<String> Upload_Image()
         {
-            //Constructs POST request to API. Replace Constants.API_URL with the address of your own web API. To create the 
-            //Web API, look at the ImageUploadAPI project
-            /*HttpClient get_client = new HttpClient();
-            try
-            {
-                HttpResponseMessage get_response = get_client.GetAsync("http://091b8a24.ngrok.io/api/values/1").Result;
-            }catch(Exception e)
-            {
-                Console.WriteLine(e);
-                Toast.MakeText(Application.Context, "Problem connecting with API", ToastLength.Short).Show();
-            }*/
             
             var speech_result = Plugin.TextToSpeech.CrossTextToSpeech.Current.Speak("Uploading for analysis."); //gets device to say "Uploading for analysis"
             HttpContent file_stream_content = new StreamContent(image_stream);
