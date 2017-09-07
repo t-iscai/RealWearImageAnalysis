@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\Users\Isabella Cai\Documents\Visual Studio 2017\Projects\RealwearImageAnalysis\RealwearImageAnalysis\obj\Debug\Package\PackageTmp" />
+  <setAcl path="C:\Users\Isabella Cai\Documents\Visual Studio 2017\Projects\RealwearImageAnalysis\RealwearImageAnalysis\obj\Debug\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Users\Isabella Cai\Documents\Visual Studio 2017\Projects\RealwearImageAnalysis\RealwearImageAnalysis\obj\Debug\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+</sitemanifest>
